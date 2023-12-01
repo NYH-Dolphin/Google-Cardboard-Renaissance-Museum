@@ -59,7 +59,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            // MovementUpdate();
+            MovementUpdate();
             TouchUpdate();
             RotationUpdate();
         }

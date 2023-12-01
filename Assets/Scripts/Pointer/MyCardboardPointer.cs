@@ -1,4 +1,6 @@
-﻿namespace Samples.Google_Cardboard_XR_Plugin_for_Unity._1._22._0.Hello_Cardboard.Scripts
+﻿using DefaultNamespace.Museum;
+
+namespace Samples.Google_Cardboard_XR_Plugin_for_Unity._1._22._0.Hello_Cardboard.Scripts
 {
     //-----------------------------------------------------------------------
 // <copyright file="CardboardReticlePointer.cs" company="Google LLC">
@@ -157,14 +159,22 @@
                 {
                     if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                     {
-                        _gazedAtObject?.SendMessage("OnPointerExit");
+                        _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                        if (i)
+                        {
+                            _gazedAtObject?.SendMessage("OnPointerExit");
+                        }
                     }
 
                     _gazedAtObject = hit.transform.gameObject;
 
                     if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                     {
-                        _gazedAtObject.SendMessage("OnPointerEnter");
+                        _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                        if (i)
+                        {
+                            _gazedAtObject?.SendMessage("OnPointerEnter");
+                        }
                     }
                 }
 
@@ -175,7 +185,11 @@
             {
                 if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                 {
-                    _gazedAtObject?.SendMessage("OnPointerExit");
+                    _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                    if (i)
+                    {
+                        _gazedAtObject?.SendMessage("OnPointerExit");
+                    }
                 }
 
                 _gazedAtObject = null;
