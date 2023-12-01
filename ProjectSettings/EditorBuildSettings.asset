@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/Museum Art Gallery/Scenes/MuesumTest.unity
+    guid: eb7e8892567255f4dbf0035d12b0e708
   - enabled: 0
     path: Assets/Scenes/Start.unity
     guid: b758f7ed8600f5649b7efc48c7994f5a
@@ -14,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Game WebGL.unity
     guid: ffd2eea51cab4a5408f9cbdac20dcef1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Museum.unity
     guid: 06682044368eee34da2b41f89eabf777
   m_configObjects:

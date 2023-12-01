@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace.Museum;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +10,7 @@ namespace DefaultNamespace
     {
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject camera;
+        [SerializeField] private AudioSource speech;
 
 
         private InputController _inputs;
@@ -23,15 +25,17 @@ namespace DefaultNamespace
 
             _inputs.Control.Enable();
             _inputs.Museum.Enable();
+            
             _inputs.Museum.Touch.performed += OnTouchPerformed;
             _inputs.Museum.Touch.canceled += OnTouchCanceled;
-            
+            _inputs.Museum.Click.performed += OnClickPerformed;
+
             _inputs.Control.Movement.performed += OnMovementPerformed;
             _inputs.Control.Movement.canceled += OnMovementCanceled;
 
             _inputs.Control.Rotation.performed += OnRotationPerformed;
             _inputs.Control.Rotation.canceled += OnRotationCanceled;
-            
+
 
             _inputs.Control.DPad.performed += OnDPadPerformed;
             _inputs.Control.NSWE.performed += OnNSWEPerformed;
@@ -43,7 +47,7 @@ namespace DefaultNamespace
             _inputs.Control.Movement.performed -= OnMovementPerformed;
             _inputs.Control.Movement.canceled -= OnMovementCanceled;
 
-            
+
             _inputs.Control.Rotation.performed -= OnRotationPerformed;
             _inputs.Control.Rotation.performed -= OnRotationCanceled;
 
@@ -64,11 +68,36 @@ namespace DefaultNamespace
             RotationUpdate();
         }
 
+        private void OnClickPerformed(InputAction.CallbackContext value)
+        {
+            PlaySpeech();
+        }
+        
+        void PlaySpeech()
+        {
+            if (InteractableObjectBehaviour.Instance != null)
+            {
+                if (speech.clip != null)
+                {
+                    speech.Stop();
+                }
+                AudioClip clip = InteractableObjectBehaviour.Instance.GetAudioClip();
+                speech.clip = clip;
+                speech.Play();
+            }
+        }
+        
+        
+        
 
         #region [Movement]
 
         [SerializeField] private float fMoveSpeed = 5f;
         private Vector3 _vecMovDir;
+
+
+
+        
 
         private void TouchUpdate()
         {
@@ -81,10 +110,13 @@ namespace DefaultNamespace
 
 
         private bool _bTouch;
+
         private void OnTouchPerformed(InputAction.CallbackContext value)
         {
             _bTouch = true;
         }
+        
+        
 
         private void OnTouchCanceled(InputAction.CallbackContext value)
         {

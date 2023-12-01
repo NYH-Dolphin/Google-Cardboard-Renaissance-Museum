@@ -585,6 +585,15 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.2,pressPoint=0.5)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""3659b334-290e-4b20-b9a8-392865582839"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -609,6 +618,28 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""action"": ""Touch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c09c3389-a52d-46f4-99fa-656bfdfaf9e3"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98d7070e-b907-432e-a2f3-62bea5f35060"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -630,6 +661,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         // Museum
         m_Museum = asset.FindActionMap("Museum", throwIfNotFound: true);
         m_Museum_Touch = m_Museum.FindAction("Touch", throwIfNotFound: true);
+        m_Museum_Click = m_Museum.FindAction("Click", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -832,11 +864,13 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Museum;
     private List<IMuseumActions> m_MuseumActionsCallbackInterfaces = new List<IMuseumActions>();
     private readonly InputAction m_Museum_Touch;
+    private readonly InputAction m_Museum_Click;
     public struct MuseumActions
     {
         private @InputController m_Wrapper;
         public MuseumActions(@InputController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Touch => m_Wrapper.m_Museum_Touch;
+        public InputAction @Click => m_Wrapper.m_Museum_Click;
         public InputActionMap Get() { return m_Wrapper.m_Museum; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -849,6 +883,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Touch.started += instance.OnTouch;
             @Touch.performed += instance.OnTouch;
             @Touch.canceled += instance.OnTouch;
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
         }
 
         private void UnregisterCallbacks(IMuseumActions instance)
@@ -856,6 +893,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             @Touch.started -= instance.OnTouch;
             @Touch.performed -= instance.OnTouch;
             @Touch.canceled -= instance.OnTouch;
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
         }
 
         public void RemoveCallbacks(IMuseumActions instance)
@@ -890,5 +930,6 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     public interface IMuseumActions
     {
         void OnTouch(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
     }
 }
