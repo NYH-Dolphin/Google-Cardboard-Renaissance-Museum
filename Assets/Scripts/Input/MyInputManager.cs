@@ -22,11 +22,16 @@ namespace DefaultNamespace
             }
 
             _inputs.Control.Enable();
+            _inputs.Museum.Enable();
+            _inputs.Museum.Touch.performed += OnTouchPerformed;
+            _inputs.Museum.Touch.canceled += OnTouchCanceled;
+            
             _inputs.Control.Movement.performed += OnMovementPerformed;
             _inputs.Control.Movement.canceled += OnMovementCanceled;
 
             _inputs.Control.Rotation.performed += OnRotationPerformed;
             _inputs.Control.Rotation.canceled += OnRotationCanceled;
+            
 
             _inputs.Control.DPad.performed += OnDPadPerformed;
             _inputs.Control.NSWE.performed += OnNSWEPerformed;
@@ -38,6 +43,7 @@ namespace DefaultNamespace
             _inputs.Control.Movement.performed -= OnMovementPerformed;
             _inputs.Control.Movement.canceled -= OnMovementCanceled;
 
+            
             _inputs.Control.Rotation.performed -= OnRotationPerformed;
             _inputs.Control.Rotation.performed -= OnRotationCanceled;
 
@@ -53,15 +59,37 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            MovementUpdate();
+            // MovementUpdate();
+            TouchUpdate();
             RotationUpdate();
         }
 
 
         #region [Movement]
 
-        [SerializeField] private float fMoveSpeed = 20f;
+        [SerializeField] private float fMoveSpeed = 5f;
         private Vector3 _vecMovDir;
+
+        private void TouchUpdate()
+        {
+            if (_bTouch)
+            {
+                Vector3 move = camera.transform.forward;
+                player.GetComponent<Rigidbody>().velocity = move * fMoveSpeed;
+            }
+        }
+
+
+        private bool _bTouch;
+        private void OnTouchPerformed(InputAction.CallbackContext value)
+        {
+            _bTouch = true;
+        }
+
+        private void OnTouchCanceled(InputAction.CallbackContext value)
+        {
+            _bTouch = false;
+        }
 
         private void OnMovementPerformed(InputAction.CallbackContext value)
         {
@@ -77,11 +105,10 @@ namespace DefaultNamespace
 
         private void MovementUpdate()
         {
-            Vector3 movement = (transform.forward + transform.right).normalized;
-            movement.x *= _vecMovDir.x;
-            movement.z *= _vecMovDir.z;
-            movement.y = 0;
-            player.transform.Translate(movement * (fMoveSpeed * Time.deltaTime));
+            Vector3 moveF = transform.forward * _vecMovDir.z;
+            Vector3 moveR = transform.right * _vecMovDir.x;
+            Vector3 movement = moveF + moveR;
+            player.GetComponent<Rigidbody>().velocity = movement * fMoveSpeed;
         }
 
         #endregion

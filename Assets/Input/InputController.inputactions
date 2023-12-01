@@ -550,6 +550,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Museum",
+            "id": "6d232b4d-0b9f-4bb6-9c9a-337b78294767",
+            "actions": [
+                {
+                    "name": "Touch",
+                    "type": "Button",
+                    "id": "77e90390-79dd-45b4-8ba5-4b9007c43088",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.2,pressPoint=0.5)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "83473560-0353-4e29-8f93-d01dbffa57b4",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b77bffe9-8c09-4386-a468-6b5287b224e2",
+                    "path": "<Mouse>/press",
+                    "interactions": "Hold(duration=0.2,pressPoint=0.3)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

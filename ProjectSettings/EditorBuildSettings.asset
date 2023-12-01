@@ -5,12 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Start.unity
     guid: b758f7ed8600f5649b7efc48c7994f5a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Game.unity
     guid: ddcf4b707734995439a9ffc8c5a25d46
+  - enabled: 0
+    path: Assets/Scenes/Game WebGL.unity
+    guid: ffd2eea51cab4a5408f9cbdac20dcef1
+  - enabled: 1
+    path: Assets/Scenes/Museum.unity
+    guid: 06682044368eee34da2b41f89eabf777
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 11d4666c0b91003469c2dc98b55271cd, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 01fcc2664c34beb489052fd6a71e6531, type: 2}

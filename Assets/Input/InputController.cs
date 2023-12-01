@@ -572,6 +572,45 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Museum"",
+            ""id"": ""6d232b4d-0b9f-4bb6-9c9a-337b78294767"",
+            ""actions"": [
+                {
+                    ""name"": ""Touch"",
+                    ""type"": ""Button"",
+                    ""id"": ""77e90390-79dd-45b4-8ba5-4b9007c43088"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.2,pressPoint=0.5)"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""83473560-0353-4e29-8f93-d01dbffa57b4"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Touch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b77bffe9-8c09-4386-a468-6b5287b224e2"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": ""Hold(duration=0.2,pressPoint=0.3)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Touch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -588,6 +627,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         m_ParkourGame_Right = m_ParkourGame.FindAction("Right", throwIfNotFound: true);
         m_ParkourGame_Start = m_ParkourGame.FindAction("Start", throwIfNotFound: true);
         m_ParkourGame_Click = m_ParkourGame.FindAction("Click", throwIfNotFound: true);
+        // Museum
+        m_Museum = asset.FindActionMap("Museum", throwIfNotFound: true);
+        m_Museum_Touch = m_Museum.FindAction("Touch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -785,6 +827,52 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         }
     }
     public ParkourGameActions @ParkourGame => new ParkourGameActions(this);
+
+    // Museum
+    private readonly InputActionMap m_Museum;
+    private List<IMuseumActions> m_MuseumActionsCallbackInterfaces = new List<IMuseumActions>();
+    private readonly InputAction m_Museum_Touch;
+    public struct MuseumActions
+    {
+        private @InputController m_Wrapper;
+        public MuseumActions(@InputController wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Touch => m_Wrapper.m_Museum_Touch;
+        public InputActionMap Get() { return m_Wrapper.m_Museum; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MuseumActions set) { return set.Get(); }
+        public void AddCallbacks(IMuseumActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MuseumActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MuseumActionsCallbackInterfaces.Add(instance);
+            @Touch.started += instance.OnTouch;
+            @Touch.performed += instance.OnTouch;
+            @Touch.canceled += instance.OnTouch;
+        }
+
+        private void UnregisterCallbacks(IMuseumActions instance)
+        {
+            @Touch.started -= instance.OnTouch;
+            @Touch.performed -= instance.OnTouch;
+            @Touch.canceled -= instance.OnTouch;
+        }
+
+        public void RemoveCallbacks(IMuseumActions instance)
+        {
+            if (m_Wrapper.m_MuseumActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMuseumActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MuseumActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MuseumActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MuseumActions @Museum => new MuseumActions(this);
     public interface IControlActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -798,5 +886,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         void OnRight(InputAction.CallbackContext context);
         void OnStart(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
+    }
+    public interface IMuseumActions
+    {
+        void OnTouch(InputAction.CallbackContext context);
     }
 }
