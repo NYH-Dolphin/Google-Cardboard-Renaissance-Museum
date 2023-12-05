@@ -159,7 +159,7 @@ namespace Samples.Google_Cardboard_XR_Plugin_for_Unity._1._22._0.Hello_Cardboard
                 {
                     if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                     {
-                        _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                        _gazedAtObject.TryGetComponent(out InteractableBehaviour i);
                         if (i)
                         {
                             _gazedAtObject?.SendMessage("OnPointerExit");
@@ -170,7 +170,7 @@ namespace Samples.Google_Cardboard_XR_Plugin_for_Unity._1._22._0.Hello_Cardboard
 
                     if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                     {
-                        _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                        _gazedAtObject.TryGetComponent(out InteractableBehaviour i);
                         if (i)
                         {
                             _gazedAtObject?.SendMessage("OnPointerEnter");
@@ -185,7 +185,7 @@ namespace Samples.Google_Cardboard_XR_Plugin_for_Unity._1._22._0.Hello_Cardboard
             {
                 if (_gazedAtObject?.layer == LayerMask.NameToLayer("Interactive"))
                 {
-                    _gazedAtObject.TryGetComponent(out InteractableObjectBehaviour i);
+                    _gazedAtObject.TryGetComponent(out InteractableBehaviour i);
                     if (i)
                     {
                         _gazedAtObject?.SendMessage("OnPointerExit");

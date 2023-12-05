@@ -25,7 +25,7 @@ namespace DefaultNamespace
 
             _inputs.Control.Enable();
             _inputs.Museum.Enable();
-            
+
             _inputs.Museum.Touch.performed += OnTouchPerformed;
             _inputs.Museum.Touch.canceled += OnTouchCanceled;
             _inputs.Museum.Click.performed += OnClickPerformed;
@@ -70,34 +70,40 @@ namespace DefaultNamespace
 
         private void OnClickPerformed(InputAction.CallbackContext value)
         {
-            PlaySpeech();
+            InteractiveTrigger();
         }
-        
-        void PlaySpeech()
+
+        void InteractiveTrigger()
         {
-            if (InteractableObjectBehaviour.Instance != null)
+            if (InteractableBehaviour.Instance != null)
             {
-                if (speech.clip != null)
+                if (InteractableBehaviour.Instance is InteractableObjectBehaviour)
+                {
+                    InteractableObjectBehaviour obj = (InteractableObjectBehaviour)InteractableBehaviour.Instance;
+                    if (speech.clip != null)
+                    {
+                        speech.Stop();
+                    }
+
+                    AudioClip clip = obj.GetAudioClip();
+                    speech.clip = clip;
+                    speech.Play();
+                }
+                else if (InteractableBehaviour.Instance is InteractableVideoBehaviour)
                 {
                     speech.Stop();
+                    InteractableVideoBehaviour video = (InteractableVideoBehaviour)InteractableBehaviour.Instance;
+                    video.TriggerVideo();
                 }
-                AudioClip clip = InteractableObjectBehaviour.Instance.GetAudioClip();
-                speech.clip = clip;
-                speech.Play();
             }
         }
-        
-        
-        
+
 
         #region [Movement]
 
         [SerializeField] private float fMoveSpeed = 5f;
         private Vector3 _vecMovDir;
 
-
-
-        
 
         private void TouchUpdate()
         {
@@ -115,8 +121,7 @@ namespace DefaultNamespace
         {
             _bTouch = true;
         }
-        
-        
+
 
         private void OnTouchCanceled(InputAction.CallbackContext value)
         {
