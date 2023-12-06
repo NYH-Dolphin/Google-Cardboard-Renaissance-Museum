@@ -10,6 +10,7 @@ namespace DefaultNamespace
     {
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject camera;
+        [SerializeField] private AudioSource bgm;
         [SerializeField] public AudioSource speech;
 
 
@@ -32,40 +33,27 @@ namespace DefaultNamespace
             _inputs.Museum.Touch.performed += OnTouchPerformed;
             _inputs.Museum.Touch.canceled += OnTouchCanceled;
             _inputs.Museum.Click.performed += OnClickPerformed;
-            
+
             _inputs.Control.Enable();
             _inputs.Control.Rotation.performed += OnRotationPerformed;
             _inputs.Control.Rotation.canceled += OnRotationCanceled;
             _inputs.Control.Movement.performed += OnMovementPerformed;
             _inputs.Control.Movement.canceled += OnMovementCanceled;
             
-
-            //
-            //
-            // _inputs.Control.DPad.performed += OnDPadPerformed;
-            // _inputs.Control.NSWE.performed += OnNSWEPerformed;
         }
 
-        private void OnDisable()
-        {
-            // _inputs.Control.Disable();
-            // _inputs.Control.Movement.performed -= OnMovementPerformed;
-            // _inputs.Control.Movement.canceled -= OnMovementCanceled;
-            //
-            //
-            // _inputs.Control.Rotation.performed -= OnRotationPerformed;
-            // _inputs.Control.Rotation.performed -= OnRotationCanceled;
-            //
-            // _inputs.Control.DPad.performed -= OnDPadPerformed;
-            // _inputs.Control.NSWE.performed -= OnNSWEPerformed;
-        }
 
         private void Awake()
         {
             Instance = this;
-            Cursor.visible = false;
         }
 
+
+        private void Start()
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         private void Update()
         {
@@ -99,7 +87,15 @@ namespace DefaultNamespace
                 {
                     speech.Stop();
                     InteractableVideoBehaviour video = (InteractableVideoBehaviour)InteractableBehaviour.Instance;
-                    video.TriggerVideo();
+                    bool play = video.TriggerVideo();
+                    if (play)
+                    {
+                        bgm.Pause();
+                    }
+                    else
+                    {
+                        bgm.Play();
+                    }
                 }
                 else if (InteractableBehaviour.Instance is InteractablePaintingBehaviour)
                 {
@@ -173,7 +169,7 @@ namespace DefaultNamespace
 
         [SerializeField] private float fRotSpeed = 100f;
         private Vector3 _vecRotDir;
-        private readonly float _fRotDamping = 0.1f; // Adjust the damping factor as needed
+        private readonly float _fRotDamping = 1f; // Adjust the damping factor as needed
 
         private void OnRotationPerformed(InputAction.CallbackContext value)
         {

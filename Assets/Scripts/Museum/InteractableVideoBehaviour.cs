@@ -21,7 +21,7 @@ namespace DefaultNamespace.Museum
             _videoPlayer.Pause();
         }
 
-        public void TriggerVideo()
+        public bool TriggerVideo()
         {
             if (!bPlay)
             {
@@ -35,6 +35,8 @@ namespace DefaultNamespace.Museum
                 _videoPlayer.Pause();
                 bPlay = false;
             }
+
+            return bPlay;
         }
     }
 }
