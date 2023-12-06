@@ -10,7 +10,10 @@ namespace DefaultNamespace
     {
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject camera;
-        [SerializeField] private AudioSource speech;
+        [SerializeField] public AudioSource speech;
+
+
+        public static MyInputManager Instance;
 
 
         private InputController _inputs;
@@ -23,40 +26,43 @@ namespace DefaultNamespace
                 _inputs = new InputController();
             }
 
-            _inputs.Control.Enable();
+
             _inputs.Museum.Enable();
 
             _inputs.Museum.Touch.performed += OnTouchPerformed;
             _inputs.Museum.Touch.canceled += OnTouchCanceled;
             _inputs.Museum.Click.performed += OnClickPerformed;
-
-            _inputs.Control.Movement.performed += OnMovementPerformed;
-            _inputs.Control.Movement.canceled += OnMovementCanceled;
-
+            
+            _inputs.Control.Enable();
             _inputs.Control.Rotation.performed += OnRotationPerformed;
             _inputs.Control.Rotation.canceled += OnRotationCanceled;
+            _inputs.Control.Movement.performed += OnMovementPerformed;
+            _inputs.Control.Movement.canceled += OnMovementCanceled;
+            
 
-
-            _inputs.Control.DPad.performed += OnDPadPerformed;
-            _inputs.Control.NSWE.performed += OnNSWEPerformed;
+            //
+            //
+            // _inputs.Control.DPad.performed += OnDPadPerformed;
+            // _inputs.Control.NSWE.performed += OnNSWEPerformed;
         }
 
         private void OnDisable()
         {
-            _inputs.Control.Disable();
-            _inputs.Control.Movement.performed -= OnMovementPerformed;
-            _inputs.Control.Movement.canceled -= OnMovementCanceled;
-
-
-            _inputs.Control.Rotation.performed -= OnRotationPerformed;
-            _inputs.Control.Rotation.performed -= OnRotationCanceled;
-
-            _inputs.Control.DPad.performed -= OnDPadPerformed;
-            _inputs.Control.NSWE.performed -= OnNSWEPerformed;
+            // _inputs.Control.Disable();
+            // _inputs.Control.Movement.performed -= OnMovementPerformed;
+            // _inputs.Control.Movement.canceled -= OnMovementCanceled;
+            //
+            //
+            // _inputs.Control.Rotation.performed -= OnRotationPerformed;
+            // _inputs.Control.Rotation.performed -= OnRotationCanceled;
+            //
+            // _inputs.Control.DPad.performed -= OnDPadPerformed;
+            // _inputs.Control.NSWE.performed -= OnNSWEPerformed;
         }
 
         private void Awake()
         {
+            Instance = this;
             Cursor.visible = false;
         }
 
@@ -94,6 +100,12 @@ namespace DefaultNamespace
                     speech.Stop();
                     InteractableVideoBehaviour video = (InteractableVideoBehaviour)InteractableBehaviour.Instance;
                     video.TriggerVideo();
+                }
+                else if (InteractableBehaviour.Instance is InteractablePaintingBehaviour)
+                {
+                    InteractablePaintingBehaviour painting =
+                        (InteractablePaintingBehaviour)InteractableBehaviour.Instance;
+                    painting.OnClickPainting();
                 }
             }
         }
